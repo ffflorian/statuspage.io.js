@@ -22,7 +22,7 @@ export class IncidentsAPI {
    * Get a list of the 50 most recent incidents. This includes all unresolved
    * incidents as described above, as well as those in the *Resolved* and *Postmortem* state.
    */
-  public getAllIncidents(): Promise<Incidents> {
+  public getAll(): Promise<Incidents> {
     const endpoint = Endpoint.Incidents.all();
     return this.requestService.get(endpoint);
   }
@@ -31,7 +31,7 @@ export class IncidentsAPI {
    * Get a list of any unresolved incidents. This endpoint will only return
    * incidents in the *Investigating*, *Identified*, or *Monitoring* state.
    */
-  public getUnresolvedIncidents(): Promise<Incidents> {
+  public getUnresolved(): Promise<Incidents> {
     const endpoint = Endpoint.Incidents.all();
     return this.requestService.get(endpoint);
   }

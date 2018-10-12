@@ -15,36 +15,11 @@ Run `yarn add statuspage.io` or `npm install statuspage.io`.
 ```ts
 import {StatusPage} from 'statuspage.io';
 
-const statusPage = new StatusPage('my-api-key');
+const statusPage = new StatusPage('https://example.com');
 
-statusPage.api.project.getProject('npm', 'grunt')
+statusPage.api.incidents.getAll()
   .then(response => {
     //
-  })
-
-statusPage.api.project.search('grunt', {
-    filter: {
-      platforms: ['npm'],
-      licenses: ['MIT']
-    }
-  })
-  .then(projects => {
-    // ...
-  })
-
-statusPage.api.github.user.getUser('ffflorian')
-  .then(user => {
-    // ...
-  })
-
-statusPage.api.platform.getPlatforms({page: 2, perPage: 5})
-  .then(platforms => {
-    // ...
-  })
-
-statusPage.api.user.subscribe('npm', 'grunt')
-  .then(subscription => {
-    // ...
   })
 ```
 
