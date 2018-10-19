@@ -49,7 +49,29 @@ export interface ScheduledMaintenance {
 }
 
 export interface Subscriber extends Page {
+  can_select_components: boolean;
+  mode: 'webhook' | 'email_sms';
+  webhook: string;
+}
 
+export interface SMSSubscriberData {
+  phone_number: string;
+  /** defaults to `us` if not supplied */
+  phone_country?: string;
+}
+
+export interface EmailSubscriberData {
+  email: string;
+}
+
+export interface WebhookSubscriberData extends EmailSubscriberData {
+  endpoint: string;
+}
+
+export type SubscriberData = SMSSubscriberData | EmailSubscriberData | WebhookSubscriberData;
+
+export interface IncidentSubscriberData {
+  incident_id: string;
 }
 
 export interface Incident {
@@ -128,5 +150,5 @@ export interface Status extends Page {
 }
 
 export interface RequestOptions {
-
+  subscriber?: SubscriberData | SubscriberData & IncidentSubscriberData | {id: string};
 }

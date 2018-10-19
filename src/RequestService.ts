@@ -11,29 +11,34 @@ export class RequestService {
     this.apiUrl = new URL(apiUrl);
   }
 
-  public async delete(endpoint: string): Promise<boolean> {
-    return this.request<boolean>('delete', endpoint);
+  public async delete(endpoint: string, parameters?: RequestOptions): Promise<boolean> {
+    return this.request<boolean>('delete', endpoint, parameters);
   }
 
   public get<T>(endpoint: string, parameters?: RequestOptions): Promise<T> {
-    return this.request<T>('get', endpoint);
+    return this.request<T>('get', endpoint, parameters);
   }
 
   public post<T>(endpoint: string, parameters?: RequestOptions): Promise<T> {
-    return this.request<T>('post', endpoint);
+    return this.request<T>('post', endpoint, parameters);
   }
 
   public put<T>(endpoint: string, parameters?: RequestOptions): Promise<T> {
-    return this.request<T>('put', endpoint);
+    return this.request<T>('put', endpoint, parameters);
   }
 
   public setApiUrl(apiUrl: string): void {
     this.apiUrl = new URL(apiUrl);
   }
 
-  private async request<T>(method: HttpMethod, endpoint: string): Promise<T> {
+  private async request<T>(
+    method: HttpMethod,
+    endpoint: string,
+    parameters?: RequestOptions
+  ): Promise<T> {
     const config: AxiosRequestConfig = {
       method,
+      params: parameters,
       url: new URL(endpoint, this.apiUrl).href,
     };
 
