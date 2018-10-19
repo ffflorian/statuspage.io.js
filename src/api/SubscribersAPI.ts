@@ -1,5 +1,5 @@
 import {Endpoint} from '../Endpoints';
-import {Subscriber, EmailSubscriberData, SMSSubscriberData, WebhookSubscriberData, IncidentSubscriberData} from '../Interfaces';
+import {Request, Result} from '../Interfaces';
 import {RequestService} from '../RequestService';
 
 export class SubscribersAPI {
@@ -13,7 +13,7 @@ export class SubscribersAPI {
    * A page subscriber is by default subscribed to all incidents
    * associated with a page.
    */
-  public getPageSubscribers(): Promise<Subscriber[]> {
+  public getPageSubscribers(): Promise<Result.Subscriber[]> {
     const endpoint = Endpoint.subscribers();
     return this.requestService.get(endpoint);
   }
@@ -25,10 +25,10 @@ export class SubscribersAPI {
    * state to subscribe to it.
    * @param options Subscriber options.
    */
-  public createIncidentSubscription(emailSubscriber: EmailSubscriberData & IncidentSubscriberData): Promise<Subscriber>;
-  public createIncidentSubscription(smsSubscriber: SMSSubscriberData & IncidentSubscriberData): Promise<Subscriber>;
-  public createIncidentSubscription(webhookSubscriber: WebhookSubscriberData & IncidentSubscriberData): Promise<Subscriber>;
-  public createIncidentSubscription(data: (SMSSubscriberData | EmailSubscriberData | WebhookSubscriberData) & IncidentSubscriberData): Promise<Subscriber> {
+  public createIncidentSubscription(emailSubscriber: Request.EmailSubscriberData & Request.IncidentSubscriberData): Promise<Result.Subscriber>;
+  public createIncidentSubscription(smsSubscriber: Request.SMSSubscriberData & Request.IncidentSubscriberData): Promise<Result.Subscriber>;
+  public createIncidentSubscription(webhookSubscriber: Request.WebhookSubscriberData & Request.IncidentSubscriberData): Promise<Result.Subscriber>;
+  public createIncidentSubscription(data: Request.CombinedSubscriberData & Request.IncidentSubscriberData): Promise<Result.Subscriber> {
     const endpoint = Endpoint.Incidents.all();
     return this.requestService.get(endpoint, {subscriber: data});
   }
@@ -37,10 +37,10 @@ export class SubscribersAPI {
    * A page subscriber is by default subscribed to all incidents associated with a page.
    * @param options Subscriber options.
    */
-  public createPageSubscription(emailSubscriber: EmailSubscriberData): Promise<Subscriber>;
-  public createPageSubscription(smsSubscriber: SMSSubscriberData): Promise<Subscriber>;
-  public createPageSubscription(webhookSubscriber: WebhookSubscriberData): Promise<Subscriber>;
-  public createPageSubscription(data: SMSSubscriberData | EmailSubscriberData | WebhookSubscriberData): Promise<Subscriber> {
+  public createPageSubscription(emailSubscriber: Request.EmailSubscriberData): Promise<Result.Subscriber>;
+  public createPageSubscription(smsSubscriber: Request.SMSSubscriberData): Promise<Result.Subscriber>;
+  public createPageSubscription(webhookSubscriber: Request.WebhookSubscriberData): Promise<Result.Subscriber>;
+  public createPageSubscription(data: Request.CombinedSubscriberData): Promise<Result.Subscriber> {
     const endpoint = Endpoint.Incidents.all();
     return this.requestService.get(endpoint, {subscriber: data});
   }

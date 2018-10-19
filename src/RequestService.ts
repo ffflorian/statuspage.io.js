@@ -2,7 +2,7 @@ import axios, {AxiosRequestConfig} from 'axios';
 import {URL} from 'url';
 
 import {ExceptionMapper, InvalidResponseError} from './APIException';
-import {HttpMethod, HttpStatus, RequestOptions} from './Interfaces';
+import {HTTP, Request} from './Interfaces';
 
 export class RequestService {
   private apiUrl: URL;
@@ -11,19 +11,19 @@ export class RequestService {
     this.apiUrl = new URL(apiUrl);
   }
 
-  public async delete(endpoint: string, parameters?: RequestOptions): Promise<boolean> {
+  public async delete(endpoint: string, parameters?: Request.Options): Promise<boolean> {
     return this.request<boolean>('delete', endpoint, parameters);
   }
 
-  public get<T>(endpoint: string, parameters?: RequestOptions): Promise<T> {
+  public get<T>(endpoint: string, parameters?: Request.Options): Promise<T> {
     return this.request<T>('get', endpoint, parameters);
   }
 
-  public post<T>(endpoint: string, parameters?: RequestOptions): Promise<T> {
+  public post<T>(endpoint: string, parameters?: Request.Options): Promise<T> {
     return this.request<T>('post', endpoint, parameters);
   }
 
-  public put<T>(endpoint: string, parameters?: RequestOptions): Promise<T> {
+  public put<T>(endpoint: string, parameters?: Request.Options): Promise<T> {
     return this.request<T>('put', endpoint, parameters);
   }
 
@@ -32,9 +32,9 @@ export class RequestService {
   }
 
   private async request<T>(
-    method: HttpMethod,
+    method: HTTP.Method,
     endpoint: string,
-    parameters?: RequestOptions
+    parameters?: Request.Options
   ): Promise<T> {
     const config: AxiosRequestConfig = {
       method,
@@ -44,7 +44,6 @@ export class RequestService {
 
     try {
       const {data, headers, status} = await axios.request<T>(config);
-
       const contentType = headers['content-type'] ? String(headers['content-type']) : undefined;
 
       if (contentType) {
@@ -53,7 +52,7 @@ export class RequestService {
         } else {
           throw new InvalidResponseError('The server responded with invalid data: No JSON sent.');
         }
-      } else if (status === HttpStatus.NO_CONTENT) {
+      } else if (status === HTTP.Status.NO_CONTENT) {
         return data;
       } else {
         throw new InvalidResponseError('The server responded with invalid data: No Content-Type set.');

@@ -1,5 +1,5 @@
 import {AxiosError} from 'axios';
-import {HttpStatus} from './Interfaces';
+import {HTTP} from './Interfaces';
 
 export class APIException extends Error {
   constructor(message = '', serverMessage?: string) {
@@ -45,11 +45,11 @@ export function ExceptionMapper(error: AxiosError): Error {
     const serverMessage = error.response.data ? error.response.data.message : undefined;
 
     switch (error.response.status) {
-      case HttpStatus.FORBIDDEN:
+      case HTTP.Status.FORBIDDEN:
         return new AuthenticationError(error.message, serverMessage);
-      case HttpStatus.NOT_FOUND:
+      case HTTP.Status.NOT_FOUND:
         return new NotFoundError(error.message, serverMessage);
-      case HttpStatus.TOO_MANY_REQUESTS:
+      case HTTP.Status.TOO_MANY_REQUESTS:
         return new RateLimitError(error.message, serverMessage);
       default:
         return new APIException(error.message, serverMessage);
