@@ -2,17 +2,6 @@ import {Endpoint} from '../Endpoints';
 import {Result} from '../Interfaces';
 import {RequestService} from '../RequestService';
 
-/**
- * Scheduled Maintenances are planned outages, upgrades, or general notices that
- * you're working on infrastructure and disruptions may occurr. A close sibling
- * of Incidents, each usually goes through a progression of statuses listed below,
- * with an impact calculated from a blend of component statuses (or an optional
- * override).
- *
- * **Status**: *Scheduled*, *In Progress*, *Verifying*, or *Completed*
- *
- * **Impact**: *None (black)*, *Minor (yellow)*, *Major (orange)*, or *Critical (red)*
- */
 export class ScheduledMaintenancesAPI {
   private readonly requestService: RequestService;
 

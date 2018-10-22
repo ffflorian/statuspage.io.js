@@ -1,5 +1,15 @@
 import {IncidentsAPI, ScheduledMaintenancesAPI, SubscribersAPI} from './api/';
 
+export interface ClientOptionsUrl {
+  /** The StatusPage client page URL (e.g. `https://www.traviscistatus.com`) */
+  pageUrl: string;
+}
+
+export interface ClientOptionsId {
+  /** The StatusPage client page ID (e.g. `pnpcptp8xh9k`) */
+  pageId: string;
+}
+
 export namespace HTTP {
   export type Method = 'delete' | 'get' | 'post' | 'put';
 
@@ -14,7 +24,6 @@ export namespace HTTP {
 
 export namespace Result {
   export interface Component {
-    components?: string[];
     created_at: string;
     description: string | null;
     group_id: string | null;
@@ -32,7 +41,6 @@ export namespace Result {
       id: string;
       name: string;
       url: string;
-      updated_at: string;
     };
   }
 
@@ -55,8 +63,21 @@ export namespace Result {
 
   export interface Subscriber extends Page {
     can_select_components: boolean;
-    mode: 'webhook' | 'email_sms';
+  }
+
+  export interface WebhookSubscriber extends Subscriber {
+    mode: 'webhook';
     webhook: string;
+  }
+
+  export interface EmailSubscriber extends Subscriber {
+    mode: 'email_sms';
+    email: string;
+  }
+
+  export interface PhoneSubscriber extends Subscriber {
+    mode: 'email_sms';
+    phone: string;
   }
 
   export interface Incident {
@@ -90,12 +111,13 @@ export namespace Result {
     };
   }
 
+  export type CombinedSubscriber = PhoneSubscriber | EmailSubscriber | WebhookSubscriber;
   export type Summary = Status & ScheduledMaintenance & Components & Incidents;
 }
 
 export namespace Request {
-  export interface ClientOptions {
-    apiUrl: string;
+  export interface ComponentSubscriberData {
+    component_id: string;
   }
 
   export interface EmailSubscriberData {
@@ -110,7 +132,7 @@ export namespace Request {
     subscriber?: CombinedSubscriberData | (CombinedSubscriberData & IncidentSubscriberData) | {id: string};
   }
 
-  export interface SMSSubscriberData {
+  export interface PhoneSubscriberData {
     phone_number: string;
     /** defaults to `us` if not supplied */
     phone_country?: string;
@@ -124,14 +146,38 @@ export namespace Request {
     endpoint: string;
   }
 
-  export type CombinedSubscriberData = SMSSubscriberData | EmailSubscriberData | WebhookSubscriberData;
+  export type CombinedSubscriberData = PhoneSubscriberData | EmailSubscriberData | WebhookSubscriberData;
 }
 
 export interface API {
-  getComponents: () => Promise<Result.Component[]>;
-  getStatus: () => Promise<Result.Status>;
-  getSummary: () => Promise<Result.Summary>;
+  getComponents(): Promise<Result.Components>;
+  getStatus(): Promise<Result.Status>;
+  getSummary(): Promise<Result.Summary>;
+  /**
+   * Incidents are the cornerstone of any status page, being composed of many incident
+   * updates. Each incident usually goes through a progression of statuses listed below,
+   * with an impact calculated from a blend of component statuses (or an optional override).
+   *
+   * **Status**: *Investigating*, *Identified*, *Monitoring*, *Resolved*, or *Postmortem*
+   *
+   * **Impact**: *None (black*), *Minor (yellow*), *Major (orange*), or *Critical (red)*
+   */
   incidents: IncidentsAPI;
+  /**
+   * Scheduled Maintenances are planned outages, upgrades, or general notices that
+   * you're working on infrastructure and disruptions may occurr. A close sibling
+   * of Incidents, each usually goes through a progression of statuses listed below,
+   * with an impact calculated from a blend of component statuses (or an optional
+   * override).
+   *
+   * **Status**: *Scheduled*, *In Progress*, *Verifying*, or *Completed*
+   *
+   * **Impact**: *None (black)*, *Minor (yellow)*, *Major (orange)*, or *Critical (red)*
+   */
   scheduledMaintenances: ScheduledMaintenancesAPI;
+  /**
+   * Subscribers receive notifications via a webhook, email or SMS. You can create and
+   * disable subscriptions for pages and unresolved incidents using the subscribers api.
+   */
   subscribers: SubscribersAPI;
 }
