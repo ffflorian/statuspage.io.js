@@ -11,8 +11,8 @@ export class RequestService {
     this.apiUrl = new URL(apiUrl);
   }
 
-  public async delete(endpoint: string, parameters?: Request.Options): Promise<boolean> {
-    return this.request<boolean>('delete', endpoint, parameters);
+  public async delete<T>(endpoint: string, parameters?: Request.Options): Promise<T> {
+    return this.request<T>('delete', endpoint, parameters);
   }
 
   public get<T>(endpoint: string, parameters?: Request.Options): Promise<T> {
@@ -36,6 +36,7 @@ export class RequestService {
     endpoint: string,
     parameters?: Request.Options
   ): Promise<T> {
+
     const config: AxiosRequestConfig = {
       method,
       params: parameters,

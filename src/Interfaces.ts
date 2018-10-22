@@ -134,7 +134,7 @@ export namespace Request {
 
   export interface PhoneSubscriberData {
     phone_number: string;
-    /** defaults to `us` if not supplied */
+    /** Defaults to `us` if not supplied. */
     phone_country?: string;
   }
 
