@@ -36,7 +36,6 @@ export class RequestService {
     endpoint: string,
     parameters?: Request.Options
   ): Promise<T> {
-
     const config: AxiosRequestConfig = {
       method,
       params: parameters,
