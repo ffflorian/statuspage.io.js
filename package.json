@@ -35,7 +35,7 @@
     "dist": "yarn clear && yarn build",
     "dist:docs": "yarn clear:docs && yarn build:docs && nodetouch docs/.nojekyll",
     "prettier": "prettier --ignore-path .gitignore --write \"**/*.ts\"",
-    "test": "exit 0"
+    "test": "yarn dist"
   },
   "types": "dist/index.d.ts",
   "version": "1.0.0"
