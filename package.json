@@ -29,7 +29,7 @@
   "repository": "https://github.com/ffflorian/statuspage.io.js.git",
   "scripts": {
     "build": "tsc",
-    "build:docs": "typedoc --out docs/ --mode modules --excludePrivate --excludeExternals --exclude \"**/*(index|Endpoints|RequestService).ts\"",
+    "build:docs": "typedoc",
     "clear": "rimraf dist",
     "clear:docs": "rimraf docs",
     "dist": "yarn clear && yarn build",
@@ -37,6 +37,5 @@
     "prettier": "prettier --ignore-path .gitignore --write \"**/*.ts\"",
     "test": "yarn dist"
   },
-  "types": "dist/index.d.ts",
   "version": "1.0.2"
 }
